@@ -1,0 +1,75 @@
+apply plugin: 'com.android.library'
+
+apply from: '../gradle/jacoco.gradle'
+
+apply from: '../gradle/quality.gradle'
+
+android {
+    compileSdkVersion versions.compiledSdk
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetedSdk
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dataBinding {
+        enabled = true
+    }
+    testOptions {
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support.constraint:constraint-layout:$versions.constraintLayout"
+
+    // android support libraries
+    implementation "com.android.support:support-v4:$versions.androidSupportLibrary"
+    implementation "com.android.support:appcompat-v7:$versions.androidSupportLibrary"
+    implementation "com.android.support:design:$versions.androidSupportLibrary"
+
+    // dependency injection
+    implementation "com.google.dagger:dagger:$versions.dagger"
+
+    annotationProcessor "com.google.dagger:dagger-compiler:$versions.dagger"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$versions.dagger"
+    implementation "com.google.dagger:dagger-android-support:$versions.daggerAndroidSupport"
+
+    // reactive
+    implementation "io.reactivex.rxjava2:rxjava:$versions.rxjava2Version"
+    implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroidVersion"
+
+    // timber logging
+    implementation "com.jakewharton.timber:timber:$versions.timber"
+
+    // testing
+    testImplementation "org.assertj:assertj-core:$versions.assertJ"
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$versions.mockWebServer"
+    testImplementation "org.robolectric:robolectric:$versions.robolectric"
+    testImplementation "junit:junit:$versions.junit"
+    androidTestImplementation "org.assertj:assertj-core:$versions.assertJ"
+    androidTestImplementation "com.android.support.test:runner:$versions.testRunner"
+    androidTestImplementation "com.android.support.test:rules:$versions.testRunner"
+    androidTestUtil "com.android.support.test:orchestrator:$versions.testRunner"
+
+    // room persistence
+    annotationProcessor "android.arch.persistence.room:compiler:$versions.room"
+    implementation "android.arch.persistence.room:runtime:$versions.room"
+    implementation "android.arch.persistence.room:rxjava2:$versions.room"
+    implementation "android.arch.persistence.room:testing:$versions.room"
+}
+
